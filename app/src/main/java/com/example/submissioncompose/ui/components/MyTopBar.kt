@@ -29,7 +29,7 @@ fun MyTopBar(modifier: Modifier = Modifier, onMenuClick: () -> Unit) {
             }
         },
         title = {
-            Text(stringResource(R.string.app_name))
+            Text(stringResource(R.string.agen_valorant))
         },
     )
 }

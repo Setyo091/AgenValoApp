@@ -19,8 +19,8 @@ class DetailViewModel(private val repository: Repossitory) : ViewModel() {
                 .catch {
                     _uiState.value = UiState.Error(it.message.toString())
                 }
-                .collect { member ->
-                    _uiState.value = UiState.Success(member)
+                .collect { agen ->
+                    _uiState.value = UiState.Success(agen)
                 }
         }
     }

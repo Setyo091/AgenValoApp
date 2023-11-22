@@ -7,7 +7,6 @@ sealed class Screen(val route: String) {
 
         fun createRoute(id: Int) = "detail/$id"
     }
-
     object Favorite: Screen("favorite")
     object About: Screen("about")
 }

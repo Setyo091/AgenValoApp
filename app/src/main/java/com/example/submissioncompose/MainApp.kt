@@ -44,6 +44,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -57,21 +58,32 @@ import com.example.submissioncompose.model.NavItem
 import com.example.submissioncompose.navigation.Screen
 import com.example.submissioncompose.ui.components.MyTopBar
 import com.example.mynavdrawer.R
+import com.example.submissioncompose.di.Injection
 import com.example.submissioncompose.navigation.NavArg
 import com.example.submissioncompose.ui.screen.about.AboutScreen
 import com.example.submissioncompose.ui.screen.detail.DetailScreen
+import com.example.submissioncompose.ui.screen.detail.DetailViewModel
 import com.example.submissioncompose.ui.screen.favorite.FavoriteScreen
 import com.example.submissioncompose.ui.screen.home.HomeScreen
+import com.example.submissioncompose.ui.screen.home.HomeViewModel
 import kotlinx.coroutines.launch
 
+@SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainApp(modifier: Modifier = Modifier,
             navController: NavHostController = rememberNavController()) {
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
+
+    val repository = Injection.provideRepository()
+    val homeViewModel: HomeViewModel = viewModel(factory = ViewModelFactory(repository))
+    val detailViewModel: DetailViewModel = viewModel(factory = ViewModelFactory(repository))
 
     BackPressHandler(enabled = drawerState.isOpen) {
         scope.launch {
@@ -102,6 +114,7 @@ fun MainApp(modifier: Modifier = Modifier,
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
+            if(currentRoute != Screen.Detail.route)
             MyTopBar(
                 onMenuClick = {
                     scope.launch {
@@ -115,6 +128,9 @@ fun MainApp(modifier: Modifier = Modifier,
             )
         },
     ) { paddingValues ->
+        val navigateToDetail = { id: Int ->
+            navController.navigate(Screen.Detail.createRoute(id))
+        }
         ModalNavigationDrawer(
             modifier = Modifier.padding(paddingValues),
             drawerState = drawerState,
@@ -151,9 +167,19 @@ fun MainApp(modifier: Modifier = Modifier,
                         startDestination = Screen.Home.route,
                         builder = {
                             composable(Screen.Home.route) {
-                                HomeScreen(navigateToDetail = {
-                                    navController.navigate(Screen.Detail.createRoute(id))
-                                })
+                                homeViewModel.getAllMember()
+                                HomeScreen(
+                                    navigateToDetail = navigateToDetail,
+                                    viewModel = homeViewModel)
+                            }
+                            composable(
+                                route = Screen.Detail.route,
+                                arguments = listOf(navArgument(NavArg.MEMBER_ID.key) { type = NavType.IntType })
+                            ) {
+                                val agenId = it.arguments?.getInt(NavArg.MEMBER_ID.key) ?: -1
+                                DetailScreen(
+                                    agenId = agenId,
+                                    navigateBack = { navController.navigateUp() })
                             }
                             composable(Screen.Favorite.route) {
                                 FavoriteScreen()
