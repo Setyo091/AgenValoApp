@@ -12,6 +12,7 @@ object FakeDataResource {
             agenclass = "Controller",
             country = "Amerika Serikat",
             R.drawable.brimstone,
+            isFavoriteAgen = false
         ),
         Agen(
             id = 2,
@@ -20,6 +21,7 @@ object FakeDataResource {
             agenclass = "Sentinel",
             country = "Moroko",
             R.drawable.cypher,
+            isFavoriteAgen = false
         ),
         Agen(
             id = 3,
@@ -28,6 +30,7 @@ object FakeDataResource {
             agenclass = "Duelist",
             country = "Korea",
             R.drawable.jett,
+            isFavoriteAgen = false
         ),
         Agen(
             id = 4,
@@ -36,6 +39,7 @@ object FakeDataResource {
             agenclass = "Sentinel",
             country = "Jerman",
             R.drawable.killjoy,
+            isFavoriteAgen = false
         ),
         Agen(
             id = 5,
@@ -44,6 +48,7 @@ object FakeDataResource {
             agenclass = "Duelist",
             country = "Britania Raya",
             R.drawable.phoenix,
+            isFavoriteAgen = false
         ),
         Agen(
             id = 6,
@@ -52,6 +57,7 @@ object FakeDataResource {
             agenclass = "Duelist",
             country = "Brazil",
             R.drawable.raze,
+            isFavoriteAgen = false
         ),
         Agen(
             id = 7,
@@ -60,6 +66,7 @@ object FakeDataResource {
             agenclass = "Duelist",
             country = "Meksiko",
             R.drawable.reyna,
+            isFavoriteAgen = false
         ),
         Agen(
             id = 8,
@@ -68,6 +75,7 @@ object FakeDataResource {
             agenclass = "Sentinel",
             country = "Tiongkok",
             R.drawable.sage,
+            isFavoriteAgen = false
         ),
         Agen(
             id = 9,
@@ -76,6 +84,7 @@ object FakeDataResource {
             agenclass = "Duelist",
             country = "Rusia",
             R.drawable.sova,
+            isFavoriteAgen = false
         ),
         Agen(
             id = 10,
@@ -84,6 +93,7 @@ object FakeDataResource {
             agenclass = "Controller",
             country = "Amerika Serikat",
             R.drawable.viperr,
+            isFavoriteAgen = false
         ),
     )
 }

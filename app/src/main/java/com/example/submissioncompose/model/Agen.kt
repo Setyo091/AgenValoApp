@@ -6,5 +6,6 @@ data class Agen(
     val description: String,
     val agenclass : String,
     val country : String,
-    val photo: Int
+    val photo: Int,
+    val isFavoriteAgen: Boolean,
     )

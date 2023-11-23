@@ -2,7 +2,6 @@ package com.example.submissioncompose.ui.screen.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,21 +12,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Icon
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,8 +37,10 @@ import com.example.mynavdrawer.R
 import com.example.submissioncompose.ViewModelFactory
 import com.example.submissioncompose.di.Injection
 import com.example.submissioncompose.ui.common.UiState
+import com.example.submissioncompose.ui.components.DetailTopBar
 import com.example.submissioncompose.ui.theme.MyNavDrawerTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,
@@ -63,15 +65,38 @@ fun DetailScreen(
                     country,
                     photo,
                 ) = uiState.data
-                DetailContent(
-                    name = name,
-                    description = description,
-                    agenclass = agenclass,
-                    country = country,
-                    photo = photo,
-                    modifier = modifier,
-                    onBackClick = navigateBack
-                )
+                var isFavorite by remember {
+                    mutableStateOf(uiState.data.isFavoriteAgen)
+                }
+                Scaffold(
+                    topBar = {
+                        DetailTopBar(
+                            title = uiState.data.name,
+                            isFavorite = isFavorite,
+                            onFavoriteClicked = {
+                                isFavorite = !isFavorite
+                                viewModel.updateFavoritAgen(
+                                    uiState.data,
+                                    isFavorite
+                                )
+                            },
+                            navigateBack = navigateBack
+                        )
+                    }
+                ) { padding ->
+                    Column(modifier = modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                    ) {
+                        DetailContent(
+                            name = name,
+                            description = description,
+                            agenclass = agenclass,
+                            country = country,
+                            photo = photo,
+                        )
+                    }
+                }
             }
 
             is UiState.Error -> {}
@@ -85,12 +110,8 @@ fun DetailContent(
     agenclass: String,
     country: String,
     photo: Int,
-    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val textStyle = MaterialTheme.typography.titleMedium.copy(
-        fontWeight = FontWeight.Bold
-    )
     Column(modifier = modifier) {
         Column(
             modifier = Modifier
@@ -106,13 +127,6 @@ fun DetailContent(
                         .height(400.dp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
-                )
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = stringResource(R.string.tombol_back),
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .clickable { onBackClick }
                 )
             }
             Column(
@@ -145,6 +159,7 @@ fun DetailContent(
                     text = description,
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Justify,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
@@ -162,11 +177,10 @@ fun DetailPreview() {
     MyNavDrawerTheme() {
         DetailContent(
             name = "setyo",
-            description = "adalah seorang gembala",
+            description = "adalah seorang gembala yang sedang mengerjakan tugas submission android jetpack compose dan dirumahnya ada banyak orang yang bisa di bilang adalah keluarganya, ada adik, kakak, ayah, ibu, dan saya sendiri.",
             agenclass = "Duelist",
             country = "Indonesia",
             photo = R.drawable.zz,
-            onBackClick = {}
         )
     }
     

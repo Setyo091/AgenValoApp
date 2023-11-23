@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.submissioncompose.data.Repossitory
 import com.example.submissioncompose.ui.screen.detail.DetailViewModel
+import com.example.submissioncompose.ui.screen.favorite.FavoriteViewModel
 import com.example.submissioncompose.ui.screen.home.HomeViewModel
 
 class ViewModelFactory(private val repository: Repossitory) :
@@ -14,6 +15,7 @@ class ViewModelFactory(private val repository: Repossitory) :
         return when {
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(repository)
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> DetailViewModel(repository)
+            modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> FavoriteViewModel(repository)
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         } as T

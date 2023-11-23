@@ -33,7 +33,7 @@ fun HomeScreen(
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
             is UiState.Loading -> {
-                viewModel.getAllMember()
+                viewModel.getAllAgen()
             }
             is UiState.Success -> {
                 HomeContent(

@@ -24,4 +24,9 @@ class DetailViewModel(private val repository: Repossitory) : ViewModel() {
                 }
         }
     }
+    fun updateFavoritAgen(agen: Agen, isFavoriteAgen: Boolean) {
+        viewModelScope.launch {
+            repository.updateFavoriteAgen(agen.id, isFavoriteAgen)
+        }
+    }
 }
