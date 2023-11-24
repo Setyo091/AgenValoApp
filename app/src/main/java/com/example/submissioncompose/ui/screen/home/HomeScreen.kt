@@ -4,11 +4,15 @@ package com.example.submissioncompose.ui.screen.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,8 +22,8 @@ import com.example.submissioncompose.di.Injection
 import com.example.submissioncompose.model.Agen
 import com.example.submissioncompose.ui.common.UiState
 import com.example.submissioncompose.ui.components.AgenCard
+import com.example.submissioncompose.ui.components.SearchBar
 import com.example.submissioncompose.ui.theme.MyNavDrawerTheme
-import androidx.compose.foundation.lazy.grid.items
 
 
 @Composable
@@ -30,17 +34,27 @@ fun HomeScreen(
     ),
     navigateToDetail: (id: Int) -> Unit
 ) {
+    val query by viewModel.query
+
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
             is UiState.Loading -> {
                 viewModel.getAllAgen()
             }
             is UiState.Success -> {
-                HomeContent(
-                    agens = uiState.data,
-                    modifier = modifier,
-                    navigateToDetail = navigateToDetail
-                )
+                Column(
+                    modifier = modifier
+                ) {
+                    SearchBar(
+                        query = query,
+                        onQueryChange = viewModel::searchFilms,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    HomeContent(
+                        agens = uiState.data,
+                        navigateToDetail = navigateToDetail
+                    )
+                }
             }
             is UiState.Error -> {}
         }

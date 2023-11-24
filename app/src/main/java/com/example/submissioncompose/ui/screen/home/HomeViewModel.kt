@@ -1,5 +1,7 @@
 package com.example.submissioncompose.ui.screen.home
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.submissioncompose.data.Repossitory
@@ -17,14 +19,29 @@ class HomeViewModel(
     val uiState: StateFlow<UiState<List<Agen>>>
         get() = _uiState
 
+    private val _query = mutableStateOf("")
+    val query: State<String> get() = _query
+
     fun getAllAgen() {
         viewModelScope.launch {
             repository.getAllAgen()
                 .catch {
                     _uiState.value = UiState.Error(it.message.toString())
                 }
-                .collect { orderRewards ->
-                    _uiState.value = UiState.Success(orderRewards)
+                .collect { navArg ->
+                    _uiState.value = UiState.Success(navArg)
+                }
+        }
+    }
+    fun searchFilms(newQuery: String) {
+        viewModelScope.launch {
+            _query.value = newQuery
+            repository.searchAgens(_query.value)
+                .catch {
+                    _uiState.value = UiState.Error(it.message.toString())
+                }
+                .collect { agens ->
+                    _uiState.value = UiState.Success(agens)
                 }
         }
     }

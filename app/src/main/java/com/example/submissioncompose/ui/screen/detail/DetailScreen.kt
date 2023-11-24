@@ -43,8 +43,8 @@ import com.example.submissioncompose.ui.theme.MyNavDrawerTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
-    modifier: Modifier = Modifier,
     agenId: Int,
+    modifier: Modifier = Modifier,
     viewModel: DetailViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideRepository())
     ),
@@ -69,6 +69,7 @@ fun DetailScreen(
                     mutableStateOf(uiState.data.isFavoriteAgen)
                 }
                 Scaffold(
+                    modifier = modifier,
                     topBar = {
                         DetailTopBar(
                             title = uiState.data.name,
@@ -118,7 +119,9 @@ fun DetailContent(
                 .verticalScroll(rememberScrollState())
                 .weight(1f)
         ) {
-            Box {
+            Box(
+                modifier = modifier
+            ) {
                 Image(
                     painter = painterResource(photo),
                     contentDescription = null,

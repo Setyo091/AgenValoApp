@@ -16,6 +16,14 @@ class Repossitory {
             }
         }
     }
+    fun searchAgens(query: String): Flow<List<Agen>> {
+        return getAllAgen()
+            .map { favoriteAgens ->
+                favoriteAgens.filter {
+                    it.name.contains(query, ignoreCase = true)
+                }
+            }
+    }
 
     fun getAllAgen(): Flow<List<Agen>> {
         return flowOf(agens)

@@ -5,6 +5,7 @@ package com.example.submissioncompose
 import android.annotation.SuppressLint
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -83,7 +85,7 @@ fun MainApp(modifier: Modifier = Modifier,
         NavItem(
             title = stringResource(R.string.home),
             icon = Icons.Default.Home,
-            screen = Screen.Home
+            screen = Screen.Home,
         ),
         NavItem(
             title = stringResource(R.string.favourite),
@@ -159,7 +161,9 @@ fun MainApp(modifier: Modifier = Modifier,
                             homeViewModel.getAllAgen()
                             HomeScreen(
                                 navigateToDetail = navigateToDetail,
-                                viewModel = homeViewModel)
+                                viewModel = homeViewModel,
+                                modifier = modifier.background(MaterialTheme.colorScheme.background)
+                            )
                         }
                         composable(
                             route = Screen.Detail.route,
@@ -168,7 +172,9 @@ fun MainApp(modifier: Modifier = Modifier,
                             val agenId = it.arguments?.getInt(NavArg.MEMBER_ID.key) ?: -1
                             DetailScreen(
                                 agenId = agenId,
-                                navigateBack = { navController.navigateUp() })
+                                navigateBack = { navController.navigateUp() },
+                                modifier = modifier.background(MaterialTheme.colorScheme.background)
+                            )
                         }
                         composable(Screen.Favorite.route) {
                             FavoriteScreen(
